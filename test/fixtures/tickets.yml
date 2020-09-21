@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  user: one
+  subcategory: one
+  status: MyString
+  accepted: false
+  accepted_by_id: 1
+
+two:
+  title: MyString
+  description: MyText
+  user: two
+  subcategory: two
+  status: MyString
+  accepted: false
+  accepted_by_id: 1
