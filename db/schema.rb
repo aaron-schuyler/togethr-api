@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_21_233945) do
+ActiveRecord::Schema.define(version: 2020_09_22_000638) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -63,6 +63,13 @@ ActiveRecord::Schema.define(version: 2020_09_21_233945) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["subcategory_id"], name: "index_tickets_on_subcategory_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
+  end
+
+  create_table "tickets_users", id: false, force: :cascade do |t|
+    t.integer "ticket_id", null: false
+    t.integer "user_id", null: false
+    t.index ["ticket_id"], name: "index_tickets_users_on_ticket_id"
+    t.index ["user_id"], name: "index_tickets_users_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
