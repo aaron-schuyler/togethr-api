@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_secure_password
   has_many :tickets
   has_many :tickets_users
   has_many :requests, :through => :tickets_users, :source => :ticket
