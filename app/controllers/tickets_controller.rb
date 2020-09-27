@@ -1,7 +1,18 @@
 class TicketsController < ApplicationController
   def index
-    tickets = tickets.all
+    options = {}
+    options[:is_collection] = true
+    tickets = Ticket.all.map do |ticket|
+      {
+        title: ticket.title,
+        description: ticket.description,
+        category: ticket.subcategory.category.name,
+        subcategory: ticket.subcategory.name,
+        skills: ticket.skills.map {|skill| skill.name}
+      }
+    end
     render json: tickets
+
   end
   def show
     ticket = Ticket.find(params[:id])
@@ -47,7 +58,7 @@ class TicketsController < ApplicationController
     current_user.requests.remove(ticket)
   end
   def conditionally_accept
-    
+
 
   end
   def approve
