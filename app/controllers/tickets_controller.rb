@@ -7,6 +7,7 @@ class TicketsController < ApplicationController
         title: ticket.title,
         description: ticket.description,
         category: ticket.subcategory.category.name,
+        accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
         subcategory: ticket.subcategory.name,
         skills: ticket.skills.map {|skill| skill.name}
       }
