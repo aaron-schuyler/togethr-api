@@ -23,8 +23,27 @@ class TicketsController < ApplicationController
   def create
     ticket = Ticket.new(ticket_params)
     ticket.user_id = current_user_id
+    ticket.status = 'SUBMITTED'
     ticket.save
-    render json: ticket
+    params[:skills].each do |id|
+      skill = Skill.find(id)
+      ticket.skills << skill
+      skill.users.each do |user|
+        begin
+          user.requests << ticket
+        rescue
+
+        end
+      end
+    end
+    render json: {success: true, ticket: {
+      title: ticket.title,
+      description: ticket.description,
+      category: ticket.subcategory.category.name,
+      accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
+      subcategory: ticket.subcategory.name,
+      skills: ticket.skills.map {|skill| skill.name}
+      }}
   end
   def update
 
