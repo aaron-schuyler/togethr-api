@@ -2,15 +2,8 @@ class TicketsController < ApplicationController
   def index
     options = {}
     options[:is_collection] = true
-    tickets = Ticket.all.map do |ticket|
-      {
-        title: ticket.title,
-        description: ticket.description,
-        category: ticket.subcategory.category.name,
-        accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
-        subcategory: ticket.subcategory.name,
-        skills: ticket.skills.map {|skill| skill.name}
-      }
+    tickets = current_user.tickets.map do |ticket|
+      ticket_serialize(ticket)
     end
     render json: tickets
 
@@ -36,14 +29,7 @@ class TicketsController < ApplicationController
         end
       end
     end
-    render json: {success: true, ticket: {
-      title: ticket.title,
-      description: ticket.description,
-      category: ticket.subcategory.category.name,
-      accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
-      subcategory: ticket.subcategory.name,
-      skills: ticket.skills.map {|skill| skill.name}
-      }}
+    render json: {success: true, ticket: ticket_serialize(ticket) }
   end
   def update
 
@@ -51,46 +37,21 @@ class TicketsController < ApplicationController
   def destroy
     ticket = Ticket.find(params[:id])
     ticket.destroy
-  end
-  def submit
-    ticket = Ticket.find(params[:id])
-    ticket.skills.each do |skill|
-      skill.users.each do |user|
-        user.requests << ticket
-      end
-    end
-    ticket.status = 'SUBMITTED'
-    ticket.save
-    render json: ticket
-  end
-  def accept
-    ticket = Ticket.find(params[:id])
-    if !ticket.accepted || ticket.status == 'CONDITIONAL_PENDING'
-      ticket.accepted = true
-      ticket.accepted_by_id = current_user_id
-      ticket.status = 'PENDING_APPROVAL'
-      ticket.save
-      render json: ticket
-    end
-  end
-  def reject
-    ticket = Ticket.find(params[:id])
-    current_user.requests.remove(ticket)
-  end
-  def conditionally_accept
-
-
+    render json: {success: true}
   end
   def approve
     ticket = Ticket.find(params[:id])
-    if ticket.status == 'PENDING_APPROVAL' || ticket.status = 'CONDITIONAL_PENDING'
+    if ticket.status == 'PENDING_APPROVAL' || ticket.status == 'CONDITIONAL_PENDING'
       ticket.status = 'APPROVED'
       ticket.save
       ticket.providers.each do |user|
-        user.requests.remove(ticket)
+        begin
+          user.requests.remove(ticket)
+        rescue
+        end
       end
-      render json: ticket
     end
+    render json: ticket_serialize(ticket)
   end
   def close
     ticket = Ticket.find(params[:id])
@@ -104,5 +65,17 @@ class TicketsController < ApplicationController
   private
   def ticket_params
     params.require(:ticket).permit(:title, :description, :subcategory_id)
+  end
+  def ticket_serialize(ticket)
+    {
+      id: ticket.id,
+      title: ticket.title,
+      approved: ticket.status == 'APPROVED',
+      description: ticket.description,
+      category: ticket.subcategory.category.name,
+      accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
+      subcategory: ticket.subcategory.name,
+      skills: ticket.skills.map {|skill| skill.name}
+    }
   end
 end

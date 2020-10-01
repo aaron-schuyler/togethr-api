@@ -3,9 +3,10 @@ Rails.application.routes.draw do
   get '/check_session', to: 'sessions#check_session'
   delete '/logout', to: 'sessions#destroy'
   resources :tickets, only: [:index, :show, :create, :update, :destroy]
+  get '/requests', to: 'requests#index'
   patch '/tickets/:id/submit', to: 'tickets#submit'
-  patch '/tickets/:id/accept', to: 'tickets#accept'
-  patch '/tickets/:id/reject', to: 'tickets#reject'
+  patch '/requests/:id/accept', to: 'requests#accept'
+  patch '/requests/:id/reject', to: 'requests#reject'
   patch '/tickets/:id/conditionally_accept', to: 'tickets#conditionally_accept'
   patch '/tickets/:id/approve', to: 'tickets#approve'
   patch '/tickets/:id/close', to: 'tickets#close'
