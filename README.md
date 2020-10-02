@@ -1,24 +1,20 @@
-# README
+# togethr API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+this is the backend for togethr, a webapp for submitting tickets for mutual aid assistance.
 
-* Ruby version
+to use, you also need the togethr react frontend which can be found [here](https://github.com/aaron-schuyler/togethr)
 
-* System dependencies
+follow the installation instructions on the serverside, and then to run simply install dependencies, set up the database, and start the server:
 
-* Configuration
+`bundle install`
 
-* Database creation
+`rails db:migrate`
 
-* Database initialization
+you can seed the DB with premade categories and skills or change the db/seeds.rb file to make your own
 
-* How to run the test suite
+`rails db:seed`
 
-* Services (job queues, cache servers, search engines, etc.)
+`rails s`
 
-* Deployment instructions
-
-* ...
+This project is licensed under the [MIT license](https://choosealicense.com/licenses/mit/)

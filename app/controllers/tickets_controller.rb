@@ -22,6 +22,7 @@ class TicketsController < ApplicationController
       skill = Skill.find(id)
       ticket.skills << skill
       skill.users.each do |user|
+        next if user.id == current_user_id
         begin
           user.requests << ticket
         rescue
@@ -80,7 +81,7 @@ class TicketsController < ApplicationController
       description: ticket.description,
       contact: contact,
       category: ticket.subcategory.category.name,
-      accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
+      accepted: ticket.accepted,
       subcategory: ticket.subcategory.name,
       skills: ticket.skills.map {|skill| skill.name}
     }
