@@ -36,6 +36,7 @@ class RequestsController < ApplicationController
       title: ticket.title,
       description: ticket.description,
       approved: ticket.status == 'APPROVED',
+      contact: ticket.user.email,
       category: ticket.subcategory.category.name,
       accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
       subcategory: ticket.subcategory.name,

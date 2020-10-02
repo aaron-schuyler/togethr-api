@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   resources :skills, only: [:index, :show, :create]
   resources :subcategories, only: [:index, :show]
   resources :categories, only: [:index, :show]
-  resources :users, only: [:index, :show, :create, :update, :destroy]
-  patch '/users/:id/add_skills', to: 'users#add_skills'
+  resources :users, only: [:index, :update, :destroy]
+  get '/account', to: 'users#show'
+  post '/signup', to: 'users#create'
+  patch '/add_skills', to: 'users#add_skills'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

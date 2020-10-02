@@ -5,3 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+aaron = User.create(username: 'aaron', password: 'skyhigh', password_confirmation: 'skyhigh')
+bob = User.create(username: 'bob', password: 'skyhigh', password_confirmation: 'skyhigh')
+
+volunteer = Category.create(name: 'Volunteer')
+help = volunteer.subcategories.create(name: 'General Help')
+moving = help.skills.create(name: 'Moving')
+cleaning = help.skills.create(name: 'Cleaning')
+cooking = help.skills.create(name: 'Cooking')
+aaron.skills = [moving, cleaning, cooking]

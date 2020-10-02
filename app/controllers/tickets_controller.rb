@@ -25,7 +25,7 @@ class TicketsController < ApplicationController
         begin
           user.requests << ticket
         rescue
-
+          next
         end
       end
     end
@@ -67,11 +67,18 @@ class TicketsController < ApplicationController
     params.require(:ticket).permit(:title, :description, :subcategory_id)
   end
   def ticket_serialize(ticket)
+    if ticket.accepted
+      accepted_by = User.find(ticket.accepted_by_id)
+      contact = accepted_by.email
+    else
+      contact = nil
+    end
     {
       id: ticket.id,
       title: ticket.title,
       approved: ticket.status == 'APPROVED',
       description: ticket.description,
+      contact: contact,
       category: ticket.subcategory.category.name,
       accepted: ticket.accepted && ticket.accepted_by_id == current_user_id,
       subcategory: ticket.subcategory.name,
