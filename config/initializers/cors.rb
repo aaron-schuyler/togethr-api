@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins ENV['CLIENT_URL']
+    origins 'inspiring-kirch-11050f.netlify.app'
 
     resource '*',
       headers: :any,
